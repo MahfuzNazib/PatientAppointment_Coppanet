@@ -1,6 +1,5 @@
 
-using Microsoft.EntityFrameworkCore;
-using PatientAppointment.Infrastructure.Context.EFCoreDBContext;
+using PatientAppointment.API.Extensions;
 
 namespace PatientAppointment.API
 {
@@ -10,19 +9,18 @@ namespace PatientAppointment.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            // Register ApplicationDbContext
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            #region DI Extensions Register
+            builder.Services.AddDatabaseConnectionExtensions(builder.Configuration);
+            builder.Services.AddAuthenticationServiceExtensions();
+            #endregion
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -30,12 +28,8 @@ namespace PatientAppointment.API
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
