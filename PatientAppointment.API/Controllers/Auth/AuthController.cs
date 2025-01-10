@@ -24,52 +24,37 @@ namespace PatientAppointment.API.Controllers.Auth
         [HttpPost("Registration")]
         public async Task<IActionResult> UserRegistration([FromBody] RegistrationDto registrationDto)
         {
-            try
-            {
-                await _authService.UserRegistration(registrationDto);
-                return ResponseHelper.GetActionResponse(true, "User Registration Successfull");
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelper.GetActionResponse(false, $"User Registration Failed. Error Message : {ex.Message}");
-            }
+            await _authService.UserRegistration(registrationDto);
+            return ResponseHelper.GetActionResponse(true, "User Registration Successfull");
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
         {
-            try
+            (bool status, string message, Users? user) = await _authService.UserLogin(loginDto);
+
+            if (!status)
             {
-                (bool status, string message, Users? user) = await _authService.UserLogin(loginDto);
-
-                if (!status)
-                {
-                    return ResponseHelper.GetActionResponse(status, message);
-                }
-
-                // Proceed with generation JWT Token
-                var tokenHelper = new JwtTokenHelper(_configuration);
-                var accessToken = tokenHelper.GenerateJwtAccessToken(user);
-                var refreshToken = tokenHelper.GenerateRefreshToken();
-                DateTime refreshTokenExpiryTime = DateTime.UtcNow.AddDays(double.Parse(_configuration["JwtSettings:RefreshTokenDurationInDays"]));
-
-                await _authService.StoreUserLoginTokens(refreshToken, refreshTokenExpiryTime, user.Id);
-
-                var loggedInData = new
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    UserId = user.Id,
-                    UserFullName = user.UserName // We can pass our custom user view model data.
-                };
-
-                return ResponseHelper.GetActionResponse(status, message, loggedInData);
-
+                return ResponseHelper.GetActionResponse(status, message);
             }
-            catch (Exception ex)
+
+            // Proceed with generation JWT Token
+            var tokenHelper = new JwtTokenHelper(_configuration);
+            var accessToken = tokenHelper.GenerateJwtAccessToken(user);
+            var refreshToken = tokenHelper.GenerateRefreshToken();
+            DateTime refreshTokenExpiryTime = DateTime.UtcNow.AddDays(double.Parse(_configuration["JwtSettings:RefreshTokenDurationInDays"]));
+
+            await _authService.StoreUserLoginTokens(refreshToken, refreshTokenExpiryTime, user.Id);
+
+            var loggedInData = new
             {
-                return ResponseHelper.GetActionResponse(false, $"User Login Faile. Error Message : {ex.Message}");
-            }
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                UserId = user.Id,
+                UserFullName = user.UserName // We can pass our custom user view model data.
+            };
+
+            return ResponseHelper.GetActionResponse(status, message, loggedInData);
         }
     }
 }

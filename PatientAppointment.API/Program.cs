@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using PatientAppointment.API.ExceptionHandling;
 using PatientAppointment.API.Extensions;
 using System.Text;
 
@@ -16,6 +17,7 @@ namespace PatientAppointment.API
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddExceptionHandler<AppExceptionHandler>();
 
             #region DI Extensions Register
             builder.Services.AddDatabaseConnectionExtensions(builder.Configuration);
@@ -23,6 +25,7 @@ namespace PatientAppointment.API
             builder.Services.AddFluentValidatorServiceExtensions();
             builder.Services.AddJWTTokenAuthenticationExtension(builder.Configuration);
             builder.Services.AddDoctorServiceExtensions();
+            builder.Services.AddPatientAppointmentServiceExtensions();
             #endregion
 
             
@@ -34,6 +37,7 @@ namespace PatientAppointment.API
                 app.UseSwaggerUI();
             }
 
+            app.UseExceptionHandler(_ => { });
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();

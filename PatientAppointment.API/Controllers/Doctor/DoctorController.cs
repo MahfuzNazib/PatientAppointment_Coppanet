@@ -22,15 +22,8 @@ namespace PatientAppointment.API.Controllers.Doctor
         [HttpPost("AddDoctor")]
         public async Task<IActionResult> AddDoctor([FromBody] DoctorDto doctorDto)
         {
-            try
-            {
-                await _doctorService.AddDoctor(doctorDto);
-                return ResponseHelper.GetActionResponse(true, "Doctor Create Successfully");
-            }
-            catch (Exception ex)
-            {
-                return ResponseHelper.GetActionResponse(false, $"New Doctor Creation Failed. Error Message : {ex.Message}");
-            }
+            await _doctorService.AddDoctor(doctorDto);
+            return ResponseHelper.GetActionResponse(true, "Doctor Create Successfully");
         }
 
     }

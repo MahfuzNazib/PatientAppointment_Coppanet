@@ -1,9 +1,4 @@
 ﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatientAppointment.Application.DTO.PatientAppointment
 {
@@ -23,7 +18,7 @@ namespace PatientAppointment.Application.DTO.PatientAppointment
 
             RuleFor(x => x.AppointmentTime)
                 .Must(IsValidAppointmentTime)
-                .WithMessage("Appointment time must be between 08:00 AM and 08:00 PM.");
+                .WithMessage("Appointment time must be between 08:00 AM and 08:00 PM.");  //Just a custom time validation.
 
         }
 
