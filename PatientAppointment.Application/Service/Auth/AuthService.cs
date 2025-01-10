@@ -1,4 +1,4 @@
-﻿using PatientAppointment.Application.DTO.Auth;
+﻿using PatientAppointment.Application.DTO.Auth.Registration;
 using PatientAppointment.Application.IService.Auth;
 using PatientAppointment.Domain.Entities;
 using PatientAppointment.Domain.IRepository.Auth;

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PatientAppointment.Application.DTO.Auth
+namespace PatientAppointment.Application.DTO.Auth.Registration
 {
     public class RegistrationDto
     {

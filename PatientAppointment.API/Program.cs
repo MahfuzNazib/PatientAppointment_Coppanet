@@ -17,6 +17,7 @@ namespace PatientAppointment.API
             #region DI Extensions Register
             builder.Services.AddDatabaseConnectionExtensions(builder.Configuration);
             builder.Services.AddAuthenticationServiceExtensions();
+            builder.Services.AddFluentValidatorServiceExtensions();
             #endregion
 
             var app = builder.Build();

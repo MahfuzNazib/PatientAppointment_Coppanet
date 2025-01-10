@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientAppointment.API.Helpers;
-using PatientAppointment.Application.DTO.Auth;
+using PatientAppointment.Application.DTO.Auth.Registration;
 using PatientAppointment.Application.IService.Auth;
 
 namespace PatientAppointment.API.Controllers.Auth
@@ -18,7 +18,7 @@ namespace PatientAppointment.API.Controllers.Auth
         }
 
         [HttpPost("Registration")]
-        public async Task<IActionResult> UserRegistration(RegistrationDto registrationDto)
+        public async Task<IActionResult> UserRegistration([FromBody] RegistrationDto registrationDto)
         {
             try
             {
