@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PatientAppointment.API.Helpers;
+using PatientAppointment.Application.DTO.Auth.Login;
 using PatientAppointment.Application.DTO.Auth.Registration;
 using PatientAppointment.Application.IService.Auth;
+using PatientAppointment.Domain.Entities;
 
 namespace PatientAppointment.API.Controllers.Auth
 {
@@ -11,10 +13,12 @@ namespace PatientAppointment.API.Controllers.Auth
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IConfiguration configuration)
         {
             _authService = authService;
+            _configuration = configuration;
         }
 
         [HttpPost("Registration")]
@@ -28,6 +32,43 @@ namespace PatientAppointment.API.Controllers.Auth
             catch (Exception ex)
             {
                 return ResponseHelper.GetActionResponse(false, $"User Registration Failed. Error Message : {ex.Message}");
+            }
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            try
+            {
+                (bool status, string message, Users? user) = await _authService.UserLogin(loginDto);
+
+                if (!status)
+                {
+                    return ResponseHelper.GetActionResponse(status, message);
+                }
+
+                // Proceed with generation JWT Token
+                var tokenHelper = new JwtTokenHelper(_configuration);
+                var accessToken = tokenHelper.GenerateJwtAccessToken(user);
+                var refreshToken = tokenHelper.GenerateRefreshToken();
+                DateTime refreshTokenExpiryTime = DateTime.UtcNow.AddDays(double.Parse(_configuration["JwtSettings:RefreshTokenDurationInDays"]));
+
+                await _authService.StoreUserLoginTokens(refreshToken, refreshTokenExpiryTime, user.Id);
+
+                var loggedInData = new
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    UserId = user.Id,
+                    UserFullName = user.UserName // We can pass our custom user view model data.
+                };
+
+                return ResponseHelper.GetActionResponse(status, message, loggedInData);
+
+            }
+            catch (Exception ex)
+            {
+                return ResponseHelper.GetActionResponse(false, $"User Login Faile. Error Message : {ex.Message}");
             }
         }
     }

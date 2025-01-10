@@ -1,5 +1,8 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using PatientAppointment.API.Extensions;
+using System.Text;
 
 namespace PatientAppointment.API
 {
@@ -18,8 +21,10 @@ namespace PatientAppointment.API
             builder.Services.AddDatabaseConnectionExtensions(builder.Configuration);
             builder.Services.AddAuthenticationServiceExtensions();
             builder.Services.AddFluentValidatorServiceExtensions();
+            builder.Services.AddJWTTokenAuthenticationExtension(builder.Configuration);
             #endregion
 
+            
             var app = builder.Build();
 
             if (app.Environment.IsDevelopment())

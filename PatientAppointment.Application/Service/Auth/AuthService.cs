@@ -1,4 +1,5 @@
-﻿using PatientAppointment.Application.DTO.Auth.Registration;
+﻿using PatientAppointment.Application.DTO.Auth.Login;
+using PatientAppointment.Application.DTO.Auth.Registration;
 using PatientAppointment.Application.IService.Auth;
 using PatientAppointment.Domain.Entities;
 using PatientAppointment.Domain.IRepository.Auth;
@@ -59,5 +60,40 @@ namespace PatientAppointment.Application.Service.Auth
             });
         }
         #endregion
+
+        public async Task<(bool status, string message, Users? user)> UserLogin(LoginDto loginDto)
+        {
+            var user = await _authRepository.UserLogin(loginDto.UserName);
+
+            if (user == null)
+                return (false, $"User not found for {loginDto.UserName}", null);
+
+            bool isPasswordValid = await VerifyHashedPassword(loginDto.Password, user.HashedPassword, user.Salt);
+            if (!isPasswordValid)
+                return (false, "Invalid Credentials", null);
+            return (true, "Successfully Logged In", user);
+        
+        }
+
+        public async Task<bool> VerifyHashedPassword(string inputPassword, string storedHashedPassword, string storeSaltValue)
+        {
+            return await Task.Run(() =>
+            {
+                using (SHA256 sHA256 = SHA256.Create())
+                {
+                    string saltedInput = inputPassword + storeSaltValue;
+                    byte[] inputHashBytes = sHA256.ComputeHash(Encoding.UTF8.GetBytes(saltedInput));
+                    string inputHashedPassword = Convert.ToBase64String(inputHashBytes);
+
+                    return inputHashedPassword == storedHashedPassword;
+                }
+            });
+        }
+
+
+        public async Task StoreUserLoginTokens(string refreshToken, DateTime refreshTokenExpiryTime, int userId)
+        {
+            await _authRepository.StoreUserLoginTokens(refreshToken, refreshTokenExpiryTime, userId);
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using PatientAppointment.Application.DTO.Auth.Login;
 using PatientAppointment.Application.DTO.Auth.Registration;
 
 namespace PatientAppointment.API.Extensions
@@ -14,6 +15,7 @@ namespace PatientAppointment.API.Extensions
             });
 
             services.AddValidatorsFromAssemblyContaining<RegistrationDto>();
+            services.AddValidatorsFromAssemblyContaining<LoginDto>();
 
             return services;
         }

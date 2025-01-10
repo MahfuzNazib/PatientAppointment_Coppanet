@@ -10,5 +10,9 @@ namespace PatientAppointment.Domain.IRepository.Auth
     public interface IAuthRepository
     {
         Task UserRegistration(Users user);
+
+        Task<Users?> UserLogin(string userName);
+
+        Task StoreUserLoginTokens(string refreshToken, DateTime refreshTokenExpiryTime, int userId);
     }
 }

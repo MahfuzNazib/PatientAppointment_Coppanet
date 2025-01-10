@@ -15,5 +15,7 @@ namespace PatientAppointment.Domain.Entities
         public required string UserName { get; set; }
         public required string HashedPassword { get; set; }
         public string? Salt { get; set; }
+        public string? RefreshToken { get; set; } 
+        public DateTime? RefreshTokenExpiryTime { get; set; } 
     }
 }
