@@ -2,6 +2,8 @@
 using FluentValidation.AspNetCore;
 using PatientAppointment.Application.DTO.Auth.Login;
 using PatientAppointment.Application.DTO.Auth.Registration;
+using PatientAppointment.Application.DTO.Doctor;
+using PatientAppointment.Application.DTO.PatientAppointment;
 
 namespace PatientAppointment.API.Extensions
 {
@@ -16,6 +18,8 @@ namespace PatientAppointment.API.Extensions
 
             services.AddValidatorsFromAssemblyContaining<RegistrationDto>();
             services.AddValidatorsFromAssemblyContaining<LoginDto>();
+            services.AddValidatorsFromAssemblyContaining<DoctorDto>();
+            services.AddValidatorsFromAssemblyContaining<PatientAppointmentDto>();
 
             return services;
         }

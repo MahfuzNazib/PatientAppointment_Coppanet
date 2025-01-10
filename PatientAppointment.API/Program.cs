@@ -22,6 +22,7 @@ namespace PatientAppointment.API
             builder.Services.AddAuthenticationServiceExtensions();
             builder.Services.AddFluentValidatorServiceExtensions();
             builder.Services.AddJWTTokenAuthenticationExtension(builder.Configuration);
+            builder.Services.AddDoctorServiceExtensions();
             #endregion
 
             
