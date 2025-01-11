@@ -20,6 +20,9 @@ namespace PatientAppointment.Application.DTO.PatientAppointment
                 .Must(IsValidAppointmentTime)
                 .WithMessage("Appointment time must be between 08:00 AM and 08:00 PM.");  //Just a custom time validation.
 
+            RuleFor(x => x.DoctorId)
+                .NotEmpty().WithMessage("Doctor is required");
+
         }
 
 
