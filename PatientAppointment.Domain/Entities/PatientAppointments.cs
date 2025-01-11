@@ -11,10 +11,10 @@ namespace PatientAppointment.Domain.Entities
     {
         [Key]
         public int Id { get; set; }
-        public required string PatientName { get; set; }
-        public required string PatientContact {  get; set; }
+        public string PatientName { get; set; }
+        public string PatientContact {  get; set; }
         public DateTime AppointmentDate { get; set; }
-        public required TimeSpan AppointmentTime { get; set; }
+        public TimeSpan AppointmentTime { get; set; }
         public bool IsPatientVisit { get; set; } = false;
         public int DoctorId { get; set; } // Doctor Entity FK
 

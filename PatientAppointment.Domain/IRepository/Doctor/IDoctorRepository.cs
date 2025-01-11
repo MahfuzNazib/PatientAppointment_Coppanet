@@ -10,5 +10,7 @@ namespace PatientAppointment.Domain.IRepository.Doctor
     public interface IDoctorRepository
     {
         Task AddDoctor(Doctors doctor);
+
+        Task<List<Doctors>> GetAllDoctors();
     }
 }

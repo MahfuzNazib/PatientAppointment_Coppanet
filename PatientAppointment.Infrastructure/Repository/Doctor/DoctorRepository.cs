@@ -1,11 +1,7 @@
-﻿using PatientAppointment.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using PatientAppointment.Domain.Entities;
 using PatientAppointment.Domain.IRepository.Doctor;
 using PatientAppointment.Infrastructure.Context.EFCoreDBContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PatientAppointment.Infrastructure.Repository.Doctor
 {
@@ -22,6 +18,12 @@ namespace PatientAppointment.Infrastructure.Repository.Doctor
         {
             _applicationDbContext.Doctors.Add(doctor);
             await _applicationDbContext.SaveChangesAsync();
+        }
+
+
+        public async Task<List<Doctors>> GetAllDoctors()
+        {
+            return await _applicationDbContext.Doctors.ToListAsync();
         }
     }
 }

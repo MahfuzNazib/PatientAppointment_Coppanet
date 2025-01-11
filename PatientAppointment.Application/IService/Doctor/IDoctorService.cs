@@ -10,5 +10,7 @@ namespace PatientAppointment.Application.IService.Doctor
     public interface IDoctorService
     {
         Task AddDoctor(DoctorDto doctor);
+
+        Task<List<DoctorDto>> GetAllDoctors();
     }
 }

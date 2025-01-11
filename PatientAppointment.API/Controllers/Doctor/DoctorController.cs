@@ -26,5 +26,13 @@ namespace PatientAppointment.API.Controllers.Doctor
             return ResponseHelper.GetActionResponse(true, "Doctor Create Successfully");
         }
 
+
+        [HttpGet("Doctors")]
+        public async Task<IActionResult> GetAllDoctors()
+        {
+            var doctors = await _doctorService.GetAllDoctors();
+            return ResponseHelper.GetActionResponse(true, "Doctor Data Fetched", doctors);
+        }
+
     }
 }

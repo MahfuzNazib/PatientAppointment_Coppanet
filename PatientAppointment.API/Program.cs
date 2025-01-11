@@ -18,6 +18,7 @@ namespace PatientAppointment.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddExceptionHandler<AppExceptionHandler>();
+            builder.Services.AddAutoMapper(typeof(Program));
 
             #region DI Extensions Register
             builder.Services.AddDatabaseConnectionExtensions(builder.Configuration);

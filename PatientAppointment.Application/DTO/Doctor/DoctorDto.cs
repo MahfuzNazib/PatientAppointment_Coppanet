@@ -8,6 +8,7 @@ namespace PatientAppointment.Application.DTO.Doctor
 {
     public class DoctorDto
     {
+        public int Id { get; set; }
         public required string Name {  get; set; }
         public required string ContactNo { get; set; }
         public string? Title { get; set; }
